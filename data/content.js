@@ -5,33 +5,25 @@ self.port.on('show', function(args) {
     var output = document.getElementsByClassName("output")[0];
     var closeHandler = document.getElementsByClassName('closer')[0];
     var copyHandler = document.getElementById('copy');
-    var cyrillicLetters = " 1234567890-=!\"№;%:?*()_+йцукенгшщзхъфывапролджэ\/ячсмитьбю.ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/|ЯЧСМИТЬБЮ,";
-    var latinLetters = " 1234567890-=!@#$%^&*()_+qwertyuiop[]asdfghjkl;'\<zxcvbnm,./QWERTYUIOP{}ASDFGHJKL:\"|>ZXCVBNM<>?";
 
     input.focus();
 
     input.addEventListener("blur", function (evt) {
         var inputStr = input.value;
-        var resultStr = "";
-        var inputStrLength = inputStr.length;
-        var i = 0;
-        var letterIndex;
+        var resultStr;
 
-        for (i; i < inputStrLength; i++) {
-            letterIndex = cyrillicLetters.indexOf(inputStr[i]);
-            if (letterIndex === -1) {
-                output.innerHTML = 'Только русские буквы';
-                copyHandler.className = 'hidden';
-                setTimeout(function() {
-                    input.focus();
-                }, 300);
-                return;
-            }
-            resultStr += latinLetters[letterIndex];
+        try {
+            resultStr = mapRusToLat(inputStr);
+        } catch(err) {
+            output.innerHTML = 'Только русские буквы';
+            copyHandler.className = 'hidden';
+            setTimeout(function() {
+                input.focus();
+            }, 300);
+            return;
         }
 
         output.innerHTML = resultStr;
-
         copyHandler.className = '';
     }, false);
 
@@ -44,3 +36,22 @@ self.port.on('show', function(args) {
         self.port.emit('panel-close');
     });
 });
+
+function mapRusToLat(text) {
+    var resultStr = "";
+    var inputStrLength = text.length;
+    var i = 0;
+    var letterIndex;
+    var cyrillicLetters = " 1234567890-=!\"№;%:?*()_+йцукенгшщзхъфывапролджэ\/ячсмитьбю.ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/|ЯЧСМИТЬБЮ,";
+    var latinLetters = " 1234567890-=!@#$%^&*()_+qwertyuiop[]asdfghjkl;'\<zxcvbnm,./QWERTYUIOP{}ASDFGHJKL:\"|>ZXCVBNM<>?";
+
+    for (i; i < inputStrLength; i++) {
+        letterIndex = cyrillicLetters.indexOf(text[i]);
+        if (letterIndex === -1) {
+            throw 'Bad input data';
+        }
+        resultStr += latinLetters[letterIndex];
+    }
+
+    return resultStr;
+}
