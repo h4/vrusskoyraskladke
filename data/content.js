@@ -39,7 +39,7 @@ self.port.on('show', function(args) {
             return;
         }
 
-        output.innerHTML = resultStr;
+        output.textContent = resultStr;
         copyHandler.className = '';
     }
 });
