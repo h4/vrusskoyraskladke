@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font: 12px/1.2 sans-serif;
+        }
+        .closer {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 12px;
+            height: 12px;
+            background: #31334a;
+            border-radius: 50%;
+            color: #FFF;
+            cursor: pointer;
+        }
+        .closer:before {
+            font-size: 10px;
+            content: 'x';
+            position: absolute;
+            top: 0;
+            left: 3px;
+        }
+        #source {
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 100%;
+            margin-top: 14px;
+            border: solid 1px #a0ae9d;
+        }
+        .output {
+            margin: 10px 0;
+        }
+        #copy {
+            color: #273666;
+            cursor: pointer;
+        }
+        #copy:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="closer"></div>
+<input type="text" id="source"/>
+<div class="output"></div>
+<span id="copy" class="hidden">Копировать</span>
+</body>
+</html>
