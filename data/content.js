@@ -8,7 +8,23 @@ self.port.on('show', function(args) {
 
     input.focus();
 
-    input.addEventListener("blur", function (evt) {
+    input.addEventListener("blur", process, false);
+    input.addEventListener("keyup", function(evt) {
+        if (evt.keyCode == 13) {
+            process();
+        }
+    }, false);
+
+    closeHandler.addEventListener('click', function() {
+        self.port.emit('panel-close');
+    });
+
+    copyHandler.addEventListener('click', function(event) {
+        self.port.emit('panel-copy', output.innerHTML);
+        self.port.emit('panel-close');
+    });
+
+    function process(event) {
         var inputStr = input.value;
         var resultStr;
 
@@ -25,16 +41,7 @@ self.port.on('show', function(args) {
 
         output.innerHTML = resultStr;
         copyHandler.className = '';
-    }, false);
-
-    closeHandler.addEventListener('click', function() {
-        self.port.emit('panel-close');
-    });
-
-    copyHandler.addEventListener('click', function(event) {
-        self.port.emit('panel-copy', output.innerHTML);
-        self.port.emit('panel-close');
-    });
+    }
 });
 
 function mapRusToLat(text) {
